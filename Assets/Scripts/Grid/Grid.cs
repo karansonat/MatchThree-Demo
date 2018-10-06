@@ -13,6 +13,12 @@ namespace MatchThree.Core
             get { return _size; }
         }
 
+        private float _cellViewSize;
+        public float CellViewSize
+        {
+            get { return _cellViewSize; }
+        }
+
         public CellGrid Cells;
 
         #endregion //Fields
@@ -22,6 +28,7 @@ namespace MatchThree.Core
         public void Initialize()
         {
             CreateGrid();
+            CalculateCellSize();
         }
 
         #endregion //Public Methods
@@ -32,6 +39,22 @@ namespace MatchThree.Core
         {
             Debug.Log(string.Format("Creating a {0} x {0} grid", _size));
             Cells = new CellGrid(_size, _size);
+        }
+
+        private void CalculateCellSize()
+        {
+            var aspectRatio = (float)Screen.width / (float)Screen.height;
+
+            //Match Height
+            if (aspectRatio > 1f)
+            {
+                _cellViewSize = (float)Screen.height / (float)_size;
+            }
+            //Match Widht
+            else
+            {
+                _cellViewSize = (float)Screen.width / (float)_size;
+            }
         }
 
         #endregion //Private Methods

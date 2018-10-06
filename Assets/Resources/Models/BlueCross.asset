@@ -11,4 +11,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef1db51daad879042ae760f777d37913, type: 3}
   m_Name: BlueCross
   m_EditorClassIdentifier: 
-  _texture: {fileID: 0}
+  _sprite: {fileID: 21300000, guid: 794cb9eabb974824a8092dc3a0150b04, type: 3}

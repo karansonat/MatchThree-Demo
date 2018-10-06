@@ -11,4 +11,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4646156c1aed3349b06ac78e45ebe1d, type: 3}
   m_Name: RedCell
   m_EditorClassIdentifier: 
-  _sprite: {fileID: 0}
+  _sprite: {fileID: 21300000, guid: 997757453bbdfd24da9a82ca02f291a4, type: 3}
