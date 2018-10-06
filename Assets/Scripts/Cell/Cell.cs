@@ -13,26 +13,19 @@ namespace MatchThree.Core
             get { return _sprite; }
         }
 
-        private Piece _piece;
-        public Piece Piece
-        {
-            get { return _piece; }
-        }
-
-        public bool HasPiece
-        {
-            get { return _piece != null; }
-        }
+        public int Row { get; private set; }
+        public int Col { get; private set; }
 
         #endregion //Fields
 
-        #region Public Methods
+        #region Constructor
 
-        public void SetPiece(Piece piece)
+        public void Initialize(int row, int col)
         {
-            _piece = piece;
+            Row = row;
+            Col = col;
         }
 
-        #endregion //Public Methods
+        #endregion //Constructor
     }
 }

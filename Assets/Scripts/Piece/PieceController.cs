@@ -17,8 +17,20 @@ namespace MatchThree.Core
         {
             _model = model;
             _view = view;
+
+            _view.Initialize(_model);
         }
 
         #endregion //Constructor
+
+        #region Public Methods
+
+        public void RemovePiece()
+        {
+            UnityEngine.Object.Destroy(_model);
+            UnityEngine.Object.Destroy(_view.gameObject);
+        }
+
+        #endregion //Public Methods
     }
 }
