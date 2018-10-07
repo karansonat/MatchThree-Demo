@@ -41,8 +41,11 @@ namespace MatchThree.UI
 
         private void OnClick()
         {
-            var args = new CellButtonPressedArgs { Row = _model.Row, Col = _model.Col };
-            (this as IObservable<CellButtonPressedArgs>).Notify(args);
+            if (GameController.Instance.IsInputEnabled)
+            {
+                var args = new CellButtonPressedArgs { Row = _model.Row, Col = _model.Col };
+                (this as IObservable<CellButtonPressedArgs>).Notify(args);
+            }
         }
 
         #endregion //Private Methods

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MatchThree.Core
 {
     public class GridController : IObservable<CellButtonPressedArgs>, IObserver<CellButtonPressedArgs>,
-                                  IObservable<MatchFoundArgs>
+                                  IObservable<MatchCheckCompletedArgs>
     {
         #region Fields
 
@@ -14,7 +14,7 @@ namespace MatchThree.Core
         private GridView _view;
 
         private event EventHandler<CellButtonPressedArgs> _cellButtonPressed;
-        private event EventHandler<MatchFoundArgs> _matchFound;
+        private event EventHandler<MatchCheckCompletedArgs> _matchFound;
 
         private readonly Vector2[] _adjacentIndexHelper = new Vector2[]
         {
@@ -47,11 +47,8 @@ namespace MatchThree.Core
 
         public void ChechForMatch()
         {
-            var matchedCells = SearchForMatch(3);
-            if (matchedCells != null)
-            {
-                (this as IObservable<MatchFoundArgs>).Notify(new MatchFoundArgs(matchedCells));
-            }
+            var matchedCells = SearchForMatch(GameController.MATCH_PIECE_COUNT, GameController.ALLOW_BETTER_MATCHES);
+            (this as IObservable<MatchCheckCompletedArgs>).Notify(new MatchCheckCompletedArgs(matchedCells));
         }
 
         public void ClearCells(List<CellController> cellControllers)
@@ -84,7 +81,7 @@ namespace MatchThree.Core
             }
         }
 
-        private List<CellController> SearchForMatch(int pieceCount)
+        private List<CellController> SearchForMatch(int pieceCount, bool allowBetterMatches = false)
         {
             var matchedPieces = new List<CellController>();
 
@@ -97,9 +94,9 @@ namespace MatchThree.Core
 
                     matchedPieces.Clear();
                     matchedPieces.Add(cellController);
-                    GetAdjacentCellsWithPieceRecursively(cellController, ref matchedPieces, pieceCount);
+                    GetAdjacentCellsWithPieceRecursively(cellController, ref matchedPieces, pieceCount, allowBetterMatches);
 
-                    if (matchedPieces.Count == pieceCount)
+                    if (allowBetterMatches && matchedPieces.Count >= pieceCount || matchedPieces.Count == pieceCount)
                         return matchedPieces;
                 }
             }
@@ -107,7 +104,7 @@ namespace MatchThree.Core
             return null;
         }
 
-        private void GetAdjacentCellsWithPieceRecursively(CellController cellController, ref List<CellController> matchedCells, int pieceCount)
+        private void GetAdjacentCellsWithPieceRecursively(CellController cellController, ref List<CellController> matchedCells, int pieceCount, bool allowBetterMatches)
         {
             var row = cellController.Row;
             var col = cellController.Col;
@@ -119,10 +116,10 @@ namespace MatchThree.Core
                 {
                     matchedCells.Add(adjacentCell);
 
-                    if (matchedCells.Count == pieceCount)
+                    if (!allowBetterMatches && matchedCells.Count == pieceCount)
                         return;
 
-                    GetAdjacentCellsWithPieceRecursively(adjacentCell, ref matchedCells, pieceCount);
+                    GetAdjacentCellsWithPieceRecursively(adjacentCell, ref matchedCells, pieceCount, allowBetterMatches);
                 }
             }
 
@@ -149,17 +146,17 @@ namespace MatchThree.Core
             }
         }
 
-        void IObservable<MatchFoundArgs>.Attach(IObserver<MatchFoundArgs> observer)
+        void IObservable<MatchCheckCompletedArgs>.Attach(IObserver<MatchCheckCompletedArgs> observer)
         {
             _matchFound += observer.OnNotified;
         }
 
-        void IObservable<MatchFoundArgs>.Detach(IObserver<MatchFoundArgs> observer)
+        void IObservable<MatchCheckCompletedArgs>.Detach(IObserver<MatchCheckCompletedArgs> observer)
         {
             _matchFound -= observer.OnNotified;
         }
 
-        void IObservable<MatchFoundArgs>.Notify(MatchFoundArgs eventArgs)
+        void IObservable<MatchCheckCompletedArgs>.Notify(MatchCheckCompletedArgs eventArgs)
         {
             if (_matchFound != null)
             {

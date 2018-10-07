@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using MatchThree.Core;
 using Grid = MatchThree.Core.Grid;
 
 namespace MatchThree.UI
