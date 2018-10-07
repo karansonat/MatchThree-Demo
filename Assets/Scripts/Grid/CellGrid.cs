@@ -10,7 +10,17 @@
 
         public CellController this[int row, int col]
         {
-            get { return _collection[row, col]; }
+            get
+            {
+                try
+                {
+                    return _collection[row, col];
+                }
+                catch (System.Exception)
+                {
+                    return null;
+                }
+            }
             set { _collection[row, col] = value; }
         }
     }

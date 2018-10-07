@@ -13,6 +13,9 @@ namespace MatchThree.Core
 
         private event EventHandler<CellButtonPressedArgs> _cellButtonPressed;
 
+        public int Row { get { return _model.Row; } }
+        public int Col { get { return _model.Col; } }
+
         #endregion //Fields
 
         #region Constructor
@@ -35,6 +38,20 @@ namespace MatchThree.Core
         #endregion //Constructor
 
         #region Public Methods
+
+        public bool HasPiece()
+        {
+            return _pieceController != null;
+        }
+
+        public void RemovePiece()
+        {
+            if (_pieceController != null)
+            {
+                _pieceController.RemovePiece();
+                _pieceController = null;
+            }
+        }
 
         #endregion //Public Methods
 
@@ -61,8 +78,7 @@ namespace MatchThree.Core
             }
             else
             {
-                _pieceController.RemovePiece();
-                _pieceController = null;
+                RemovePiece();
             }
         }
 

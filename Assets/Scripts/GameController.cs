@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace MatchThree.Core
 {
-    public class GameController : MonoBehaviour
+    public class GameController : MonoBehaviour, IObserver<MatchFoundArgs>, IObserver<CellButtonPressedArgs>
     {
         #region Singleton
 
@@ -50,8 +51,25 @@ namespace MatchThree.Core
             var view = GridFactory.Instance.CreateView();
             _gridController = GridFactory.Instance.CreateController(model, view);
             _gridController.Initalize();
+
+            (_gridController as IObservable<CellButtonPressedArgs>).Attach(this as IObserver<CellButtonPressedArgs>);
+            (_gridController as IObservable<MatchFoundArgs>).Attach(this as IObserver<MatchFoundArgs>);
         }
 
         #endregion //Private Methods
+
+        #region IObserver Interface
+
+        void IObserver<MatchFoundArgs>.OnNotified(object sender, MatchFoundArgs eventArgs)
+        {
+            _gridController.ClearCells(eventArgs.MatchedCells);
+        }
+
+        void IObserver<CellButtonPressedArgs>.OnNotified(object sender, CellButtonPressedArgs eventArgs)
+        {
+            _gridController.ChechForMatch();
+        }
+
+        #endregion //IObserver Interface
     }
 }
