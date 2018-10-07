@@ -7,17 +7,9 @@ namespace MatchThree.Core
     {
         #region Fields
 
-        [SerializeField] private int _size;
-        public int Size
-        {
-            get { return _size; }
-        }
+        public int Size { get; private set; }
 
-        private float _cellViewSize;
-        public float CellViewSize
-        {
-            get { return _cellViewSize; }
-        }
+        public float CellViewSize { get; private set; }
 
         public CellGrid Cells;
 
@@ -25,8 +17,10 @@ namespace MatchThree.Core
 
         #region Public Methods
 
-        public void Initialize()
+        public void Initialize(int gridSize)
         {
+            Size = gridSize;
+
             CreateGrid();
             CalculateCellSize();
         }
@@ -37,8 +31,8 @@ namespace MatchThree.Core
 
         private void CreateGrid()
         {
-            Debug.Log(string.Format("Creating a {0} x {0} grid", _size));
-            Cells = new CellGrid(_size, _size);
+            Debug.Log(string.Format("Creating a {0} x {0} grid", Size));
+            Cells = new CellGrid(Size, Size);
         }
 
         private void CalculateCellSize()
@@ -48,12 +42,12 @@ namespace MatchThree.Core
             //Match Height
             if (aspectRatio > 1f)
             {
-                _cellViewSize = (float)Screen.height / (float)_size;
+                CellViewSize = (float)Screen.height / (float)Size;
             }
             //Match Widht
             else
             {
-                _cellViewSize = (float)Screen.width / (float)_size;
+                CellViewSize = (float)Screen.width / (float)Size;
             }
         }
 

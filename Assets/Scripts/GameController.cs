@@ -10,14 +10,11 @@ namespace MatchThree.Core
 
         #region Fields
 
+        public GameSettings GameSettings;
         private GridController _gridController;
         private GameState _state;
         public bool IsInputEnabled { get; private set; }
         private List<CellController> _matchedCells;
-
-        public static readonly float MINOR_DELAY = 0.2f;
-        public static readonly int MATCH_PIECE_COUNT = 3;
-        public static readonly bool ALLOW_BETTER_MATCHES = true;
 
         #endregion //Fields
 
@@ -62,7 +59,7 @@ namespace MatchThree.Core
                         break;
                     case GameState.UpdateBoard:
                         Debug.Log(_state.ToString());
-                        yield return new WaitForSeconds(MINOR_DELAY);
+                        yield return new WaitForSeconds(GameSettings.DelayBeforeClearMatch);
                         _gridController.ClearCells(_matchedCells);
                         IsInputEnabled = true;
                         _state = GameState.WaitingForInput;

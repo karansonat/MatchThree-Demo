@@ -40,14 +40,15 @@ namespace MatchThree.Core
 
         public void Initalize()
         {
-            _model.Initialize();
+            _model.Initialize(GameController.Instance.GameSettings.GridSize);
             _view.Initialize(_model);
             CreateCells();
         }
 
         public void ChechForMatch()
         {
-            var matchedCells = SearchForMatch(GameController.MATCH_PIECE_COUNT, GameController.ALLOW_BETTER_MATCHES);
+            var settings = GameController.Instance.GameSettings;
+            var matchedCells = SearchForMatch(settings.MinMatchPieceCount, settings.AllowBetterMatches);
             (this as IObservable<MatchCheckCompletedArgs>).Notify(new MatchCheckCompletedArgs(matchedCells));
         }
 
